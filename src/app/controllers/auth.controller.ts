@@ -8,6 +8,7 @@ import {
   NotFoundError,
 } from "../../errors/customErrors";
 import { createPasswordHash, isPasswordValid } from "../../helpers/utils";
+import { sendThankYouEmail } from "../services/mailer/sendEmails";
 
 export default {
   register: async (req: Request, res: Response, next: NextFunction) => {
@@ -40,6 +41,7 @@ export default {
           token: user.token,
         },
       });
+      await sendThankYouEmail({ name: user.fullName, email: user.email });
     } catch (error) {
       next(error);
     }
@@ -114,7 +116,5 @@ export default {
     }
   },
 
-  logout: async () => {
-    
-  }
+  logout: async () => {},
 };
