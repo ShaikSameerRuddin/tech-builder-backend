@@ -116,5 +116,23 @@ export default {
     }
   },
 
-  logout: async () => {},
+  logout: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).user.id;
+      const user = await User.findOne({ _id: userId });
+
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
+
+      user.token = null; // Clear the token or set it to a value that indicates it is no longer valid
+      await user.save();
+
+      res.status(StatusCodes.OK).send({
+        message: "Successfully logged out",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
