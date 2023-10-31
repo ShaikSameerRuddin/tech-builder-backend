@@ -1,5 +1,11 @@
 import { Request, Response, Express } from "express";
-import { healthCheckUrl, loginUrl, registerUrl, userUpdateUrl } from "./urls";
+import {
+  healthCheckUrl,
+  logOutUrl,
+  loginUrl,
+  registerUrl,
+  userUpdateUrl,
+} from "./urls";
 import { authController } from "../controllers";
 import {
   checkDuplicatePhoneOrEmail,
@@ -20,4 +26,5 @@ export const routes = (app: Express, express: any) => {
   app.post(registerUrl, [checkDuplicatePhoneOrEmail], authController.register);
   app.post(loginUrl, authController.login);
   app.patch(userUpdateUrl, [authenticationCheck], authController.updateUser);
+  app.get(logOutUrl, [authenticationCheck], authController.logout);
 };
